@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:cc="http://java.sun.com/jsf/composite"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core">
+<head>
+    <title>paginator</title>
+</head>
+<body>
+    <cc:interface componentType="at.irian.PaginatorComponent">
+
+        <!-- the referencing table which must be present in the same naming container as our component -->
+        <cc:attribute name="forTable" required="true"/>
+        <cc:attribute name="page" required="false" default="0"/>
+
+    </cc:interface>
+
+    <cc:implementation>
+        <div id="#{cc.clientId}">
+        <h:panelGroup id="pagingController">
+            <f:event type="postAddToView" listener="#{cc.postAddToView}"/>
+            <f:event type="preRenderComponent" listener="#{cc.preRenderComponent}"/>
+            <ui:repeat var="index" value="#{cc.pageIndexes}" varStatus="s">
+                <h:commandLink id="xxx" value="#{s.index + 1}" action="#{cc.updateCurrentPage(index)}" rendered="#{index ne cc.currentPage}">
+                    <f:ajax execute="@this #{cc.forTableClientId}" render=":#{cc.clientId}:pagingController #{cc.forTableClientId}"/>
+                </h:commandLink>
+                <h:outputText value="#{s.index + 1}" rendered="#{index eq cc.currentPage}"/>
+                <h:outputText value="&#160;" rendered="#{not s.last}"/>
+            </ui:repeat>
+        </h:panelGroup>
+        </div>
+    </cc:implementation>
+</body>
+</html>

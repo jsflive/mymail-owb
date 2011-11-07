@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:mc="http://java.sun.com/jsf/composite/mymail">
+<head>
+    <title>Customer List</title>
+</head>
+<body>
+    <ui:composition template="/META-INF/templates/template.xhtml">
+        <ui:param name="title" value="#{msgs.titleMain} - #{msgs.titleShowMail}"/>
+
+        <ui:define name="content">
+            <h2><h:outputText value="#{msgs.titleShowMail}"/></h2>
+            <h:form id="form">
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msgs.from}"/>
+                    <h:outputText value="#{mailBean.selectedMail.from}"/>
+                    <h:outputText value="#{msgs.to}"/>
+                    <h:outputText value="#{mailBean.selectedMail.to}"/>
+                    <h:outputText value="#{msgs.date}">
+                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
+                    </h:outputText>
+                    <h:outputText value="#{mailBean.selectedMail.date}"/>
+                    <h:outputText value="#{msgs.subject}"/>
+                    <h:outputText value="#{mailBean.selectedMail.subject}"/>
+                    <h:outputText value="#{msgs.body}"/>
+                    <h:outputText value="#{mailBean.selectedMail.body}"/>
+                    <h:outputLabel for="priority" value="#{msgs.priority}"/>
+                    <h:selectOneMenu id="priority" value="#{mailBean.selectedMail.priority}">
+                        <f:selectItems value="#{selectItemsProvider.priorityItems}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandButton value="#{msgs.save}" action="#{mailBean.save}"/>
+                <h:commandButton value="#{msgs.cancel}" action="#{mailBean.cancel}" immediate="true"/>
+
+                <h3>#{msgs.attachments}</h3>
+                <mc:dataTable var="attachment" value="#{mailBean.selectedMail.attachments}">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{msgs.name}"/>
+                        </f:facet>
+                        <h:outputText value="#{attachment.name}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{msgs.mimeType}"/>
+                        </f:facet>
+                        <h:outputText value="#{attachment.mimeType}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{msgs.size}"/>
+                        </f:facet>
+                        <h:outputText value="#{attachment.size}"/>
+                    </h:column>
+                </mc:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</body>
+</html>
